@@ -121,25 +121,43 @@ html, body, [class*="css"] {
    CARDS (glass-morphism style)
 ══════════════════════════════════════════════ */
 .card {
-    background: rgba(255,255,255,0.90);
+    background: linear-gradient(160deg, rgba(255,255,255,0.97) 0%, rgba(240,246,255,0.93) 100%);
     backdrop-filter: blur(10px);
     border-radius: 16px;
-    padding: 22px 26px;
-    margin-bottom: 18px;
+    padding: 18px 22px 20px 22px;
+    margin-bottom: 16px;
     box-shadow: 0 4px 20px rgba(27,77,142,0.09), 0 1px 4px rgba(0,0,0,0.04);
     border-left: 4px solid #1B4D8E;
-    transition: box-shadow 0.2s, transform 0.2s;
+    transition: box-shadow 0.22s, transform 0.22s;
 }
 .card:hover {
-    box-shadow: 0 8px 32px rgba(27,77,142,0.14), 0 2px 8px rgba(0,0,0,0.06);
+    box-shadow: 0 8px 32px rgba(27,77,142,0.15), 0 2px 8px rgba(0,0,0,0.06);
     transform: translateY(-1px);
 }
+/* Compact pill-style section label */
 .card-title {
-    font-size: 1.05rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.72rem;
     font-weight: 800;
     color: #1B4D8E;
+    background: linear-gradient(90deg, #E8F0FD, #F5F0FF);
+    border: 1.5px solid rgba(27,77,142,0.15);
+    border-radius: 20px;
+    padding: 3px 11px 3px 8px;
     margin-bottom: 12px;
-    letter-spacing: -0.2px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+}
+.card-title::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #E04B25, #1B4D8E);
+    flex-shrink: 0;
 }
 
 /* ══════════════════════════════════════════════
@@ -753,6 +771,30 @@ def _furnish_master_like(
     return result
 
 
+def _drop_serial_first_col(df: pd.DataFrame) -> pd.DataFrame:
+    """Drop the first column if it contains only sequential integers (1, 2, 3 …).
+    Corporate inactive files often export a row-counter column that must not appear
+    in the output since the app supplies its own No. numbering."""
+    if df.empty or len(df.columns) < 2:
+        return df
+    col = df.columns[0]
+    sample = df[col].head(min(200, len(df))).dropna()
+    if sample.empty:
+        return df
+    try:
+        nums = (
+            sample.astype(str)
+            .str.strip()
+            .str.replace(r"\.0$", "", regex=True)
+            .astype(int)
+        )
+        if list(nums.values) == list(range(1, len(nums) + 1)):
+            return df.drop(columns=[col])
+    except (ValueError, TypeError):
+        pass
+    return df
+
+
 def _build_output(
     master_df: pd.DataFrame,
     inactive_df: pd.DataFrame,
@@ -760,7 +802,7 @@ def _build_output(
     inactive_guess: ColumnGuess,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     master = master_df.copy()
-    inactive = inactive_df.copy()
+    inactive = _drop_serial_first_col(inactive_df.copy())
 
     master["_merchant_code_norm"] = master[master_guess.merchant_code].map(
         _normalize_merchant_code
@@ -1135,6 +1177,6 @@ with tab_match:
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown(
-    '<div class="dengel-footer">Powered by <b>Dengel Merchant Solver</b> · Built for Awash Bank branch teams</div>',
+    '<div class="dengel-footer">Powered by <b>Dengel Merchant Solver</b> · Dev <span>emneteabg</span> · Built for Awash Bank branch teams</div>',
     unsafe_allow_html=True,
 )
