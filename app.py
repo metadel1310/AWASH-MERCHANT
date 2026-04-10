@@ -14,6 +14,198 @@ import streamlit as st
 MASTER_STORE_PATH = "data/master_store.xlsx"
 INACTIVE_TRACKER_PATH = "data/inactive_merchant_tracker.json"
 
+# ── Awash Birr Pro–inspired theme ────────────────────────────────────────────
+THEME_CSS = """
+<style>
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+html, body, [class*="css"] {
+    font-family: 'Inter', sans-serif !important;
+}
+
+/* ── Page background ── */
+.stApp {
+    background: #F4F6F9;
+}
+
+/* ── Hero header ── */
+.dengel-header {
+    background: linear-gradient(135deg, #C0311E 0%, #E85B2C 60%, #F0812A 100%);
+    border-radius: 18px;
+    padding: 28px 32px 22px 32px;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 32px rgba(192,49,30,0.22);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+.dengel-logo {
+    font-size: 2.6rem;
+    line-height: 1;
+}
+.dengel-title {
+    color: #FFFFFF;
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin: 0;
+}
+.dengel-subtitle {
+    color: rgba(255,255,255,0.82);
+    font-size: 0.92rem;
+    margin-top: 4px;
+    font-weight: 400;
+}
+
+/* ── Tabs ── */
+.stTabs [data-baseweb="tab-list"] {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    gap: 4px;
+}
+.stTabs [data-baseweb="tab"] {
+    border-radius: 9px !important;
+    font-weight: 600 !important;
+    color: #666 !important;
+    padding: 8px 22px !important;
+}
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(135deg, #C0311E, #E85B2C) !important;
+    color: #FFFFFF !important;
+}
+
+/* ── Cards / section boxes ── */
+.card {
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    border-left: 4px solid #E85B2C;
+}
+.card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #C0311E;
+    margin-bottom: 10px;
+}
+
+/* ── Primary buttons ── */
+.stButton > button[kind="primary"] {
+    background: linear-gradient(135deg, #C0311E, #E85B2C) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    padding: 10px 28px !important;
+    box-shadow: 0 4px 16px rgba(192,49,30,0.28) !important;
+    transition: opacity 0.15s !important;
+}
+.stButton > button[kind="primary"]:hover {
+    opacity: 0.88 !important;
+}
+
+/* ── Secondary buttons ── */
+.stButton > button:not([kind="primary"]) {
+    background: #FFFFFF !important;
+    color: #C0311E !important;
+    border: 2px solid #E85B2C !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+}
+
+/* ── File uploader ── */
+[data-testid="stFileUploader"] {
+    background: #FFF8F6;
+    border-radius: 12px;
+    border: 2px dashed #E85B2C;
+    padding: 12px;
+}
+
+/* ── Download button ── */
+.stDownloadButton > button {
+    background: linear-gradient(135deg, #1A5E3A, #27AE60) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    padding: 10px 28px !important;
+    box-shadow: 0 4px 16px rgba(39,174,96,0.25) !important;
+}
+
+/* ── Metric cards ── */
+[data-testid="stMetric"] {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 14px 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    border-top: 3px solid #E85B2C;
+}
+[data-testid="stMetricLabel"] {
+    color: #888 !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+[data-testid="stMetricValue"] {
+    color: #C0311E !important;
+    font-size: 1.55rem !important;
+    font-weight: 800 !important;
+}
+
+/* ── Alerts ── */
+.stSuccess {
+    border-radius: 10px !important;
+    border-left: 4px solid #27AE60 !important;
+}
+.stError {
+    border-radius: 10px !important;
+    border-left: 4px solid #C0392B !important;
+}
+.stInfo {
+    border-radius: 10px !important;
+    border-left: 4px solid #E85B2C !important;
+}
+
+/* ── Dataframe ── */
+[data-testid="stDataFrame"] {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+/* ── Checkbox ── */
+[data-testid="stCheckbox"] label {
+    font-weight: 600 !important;
+    color: #333 !important;
+}
+
+/* ── Footer badge ── */
+.dengel-footer {
+    text-align: center;
+    color: #aaa;
+    font-size: 0.78rem;
+    margin-top: 40px;
+    padding-bottom: 20px;
+}
+.dengel-footer b {
+    color: #E85B2C;
+}
+
+/* ── Mobile responsive ── */
+@media (max-width: 600px) {
+    .dengel-header { padding: 18px 16px 14px 16px; }
+    .dengel-title  { font-size: 1.25rem; }
+    .card          { padding: 16px 14px; }
+}
+</style>
+"""
+
 
 @dataclass(frozen=True)
 class ColumnGuess:
@@ -36,8 +228,6 @@ def _normalize_merchant_code(value) -> str:
     s = str(value).strip()
     s = s.replace("\u200b", "").replace("\ufeff", "")
     s = re.sub(r"\s+", "", s)
-    # Common Excel artifact when numeric IDs are read as floats in some workflows
-    # (even though we read with dtype=str, some exports may still include ".0")
     if re.fullmatch(r"\d+\.0", s):
         s = s[:-2]
     s = s.upper()
@@ -45,17 +235,10 @@ def _normalize_merchant_code(value) -> str:
 
 
 def _auto_detect_6digit_code_column(df: pd.DataFrame) -> Optional[str]:
-    """
-    Pick the column that most consistently contains 6-digit merchant codes.
-
-    We score each column by the fraction of non-empty values that look like a 6-digit code.
-    """
-
     def _clean_cell(v) -> str:
         if v is None:
             return ""
         s = _normalize_merchant_code(v)
-        # strip common wrappers like "MID: 123456" but keep only digits/spaces separators
         s = re.sub(r"[^\d]", "", s)
         return s
 
@@ -76,7 +259,6 @@ def _auto_detect_6digit_code_column(df: pd.DataFrame) -> Optional[str]:
 
     for col in df.columns:
         series = df[col]
-        # sample up to first 2000 rows for speed on huge sheets
         sample = series.head(2000)
         non_empty = sample.dropna().astype(str).map(lambda x: x.strip())
         non_empty = non_empty[non_empty != ""]
@@ -87,31 +269,23 @@ def _auto_detect_6digit_code_column(df: pd.DataFrame) -> Optional[str]:
         long_count = int(non_empty.map(is_long_numeric).sum())
         short_count = int(non_empty.map(is_short_numeric).sum())
 
-        # Primary: fraction of exact 6-digit values
         frac6 = hits6 / n
-        # Penalize phone-number-like columns (many long numeric strings)
         frac_long = long_count / n
-        # Penalize left-most index columns (many 1-3 digit sequences)
         frac_short = short_count / n
-
         score = frac6 - (0.75 * frac_long) - (0.35 * frac_short)
 
-        # Require enough evidence: at least 10 rows looking like codes in the sample
         if hits6 < 10:
             continue
         if score > best_score:
             best_score = score
             best_col = col
 
-    # Require a strong signal to avoid picking a random numeric column
     if best_col is not None and best_score >= 0.4:
         return best_col
     return None
 
 
 def _auto_detect_phone_column_251(df: pd.DataFrame) -> Optional[str]:
-    """Pick column where values (digits) most often start with 251 (e.g. Ethiopia mobile)."""
-
     def digits_only(v) -> str:
         if v is None or (isinstance(v, float) and pd.isna(v)):
             return ""
@@ -159,14 +333,7 @@ def _guess_columns(df: pd.DataFrame) -> ColumnGuess:
         return None
 
     merchant_code = pick(
-        [
-            "merchant code",
-            "merchantcode",
-            "mid",
-            "merchant id",
-            "merchantid",
-            "code",
-        ]
+        ["merchant code", "merchantcode", "mid", "merchant id", "merchantid", "code"]
     )
     if not merchant_code:
         merchant_code = _auto_detect_6digit_code_column(df)
@@ -180,20 +347,10 @@ def _guess_columns(df: pd.DataFrame) -> ColumnGuess:
     assigned_staff = pick(
         ["assigned staff", "staff", "relationship officer", "ro", "agent", "sales rep"]
     )
-    # Prefer the bank’s “Telephone” column name; fall back to common aliases, then 251-pattern detection.
     phone = pick(
         [
-            "telephone",
-            "telephone no",
-            "telephone number",
-            "phone",
-            "mobile",
-            "cell",
-            "tel",
-            "phone number",
-            "msisdn",
-            "contact",
-            "merchant phone",
+            "telephone", "telephone no", "telephone number", "phone", "mobile",
+            "cell", "tel", "phone number", "msisdn", "contact", "merchant phone",
         ]
     )
     if not phone:
@@ -214,7 +371,6 @@ def _read_excel(uploaded) -> pd.DataFrame:
 
 def _ensure_data_dir():
     import os
-
     os.makedirs("data", exist_ok=True)
 
 
@@ -236,11 +392,6 @@ def _save_inactive_tracker(tracker: dict) -> None:
 def _apply_still_inactive_and_update_tracker(
     matched: pd.DataFrame, merchant_code_col: Optional[str]
 ) -> pd.DataFrame:
-    """
-    Flag merchants who were already on a matched inactive list on a *previous* calendar day.
-    Tracker stores last_seen per 6-digit code; codes that disappear from the matched list are
-    dropped from the tracker (treated as reactivated). Same-day re-runs are not flagged.
-    """
     if matched.empty or not merchant_code_col or merchant_code_col not in matched.columns:
         return matched
 
@@ -285,7 +436,6 @@ def _apply_still_inactive_and_update_tracker(
 
 
 def _add_matched_row_numbers(matched: pd.DataFrame) -> pd.DataFrame:
-    """Left-most column No. = 1, 2, 3, … for the matched inactive export."""
     if matched.empty:
         return matched
     out = matched.copy()
@@ -318,7 +468,6 @@ def _dedupe_master(df: pd.DataFrame, merchant_code_col: str) -> pd.DataFrame:
 
 
 def _merge_side_col(df: pd.DataFrame, col: Optional[str], side: str) -> Optional[str]:
-    """Resolve column name after merge (inactive vs master suffixes)."""
     if not col:
         return None
     suffixed = f"{col}_{side}"
@@ -356,10 +505,6 @@ def _is_account_no_column(name: str) -> bool:
 
 
 def _format_account_for_excel(v) -> str:
-    """
-    Prefix a leading 0 on digit-only account values so Excel keeps them as text-like values
-    (Excel often drops a single leading zero when the cell was numeric).
-    """
     s = _clean_cell(v)
     if not s:
         return ""
@@ -372,7 +517,6 @@ def _format_account_for_excel(v) -> str:
 
 
 def _is_staff_email_column(name: str) -> bool:
-    """Staff mail / email columns are for contacting staff, not for the inactive-merchant list."""
     n = _norm_col(name)
     if not n:
         return False
@@ -387,14 +531,12 @@ def _is_staff_email_column(name: str) -> bool:
 
 
 def _output_master_columns(master_cols: list[str]) -> list[str]:
-    """Master column order minus staff mail/email columns (not shown on inactive lists)."""
     return [c for c in master_cols if not _is_staff_email_column(c)]
 
 
 def _split_dormant_staff(
     matched_raw: pd.DataFrame, master_guess: ColumnGuess
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Rows assigned to staff name 'DORMANT' are excluded from the active match list."""
     if matched_raw.empty:
         return matched_raw, pd.DataFrame(columns=matched_raw.columns)
     scol = _merge_side_col(matched_raw, master_guess.assigned_staff, "master")
@@ -420,12 +562,6 @@ def _furnish_master_like(
     inactive_guess: ColumnGuess,
     kind: str,
 ) -> pd.DataFrame:
-    """
-    Output matches the Master Excel layout: same columns in the same order (Telephone, Account No., etc.).
-    Values come from the master side of the merge; merchant code is normalized to 6 digits.
-    Unmatched rows: same headers; code/name filled from the inactive file where possible.
-    Staff email columns are omitted (those are for contacting staff, not for this list).
-    """
     master_cols = _output_master_columns(list(master_df.columns))
     out: dict[str, pd.Series] = {}
 
@@ -445,7 +581,6 @@ def _furnish_master_like(
                 out[col] = pd.Series([""] * len(df), index=df.index, dtype=object)
             continue
 
-        # unmatched
         filled = False
         if master_guess.merchant_code and col == master_guess.merchant_code:
             code_i = _merge_side_col(df, inactive_guess.merchant_code, "inactive")
@@ -562,68 +697,19 @@ def _build_dashboard_summary(
     unmatched_corporate: int,
     run_date: str,
 ) -> pd.DataFrame:
-    """Single table for Excel + app: counts and shares (decimals for Excel % format)."""
     active = max(0, total_master - inactive_in_master)
     pm = total_master if total_master else 1
     pc = corporate_rows if corporate_rows else 1
 
     rows: list[dict] = [
-        {
-            "Metric": "Report date",
-            "Count": "",
-            "Pct_of_master": None,
-            "Pct_of_corporate_file": None,
-            "Detail": run_date,
-        },
-        {
-            "Metric": "Total merchants (master portfolio)",
-            "Count": total_master,
-            "Pct_of_master": None,
-            "Pct_of_corporate_file": None,
-            "Detail": "All rows with a valid merchant code",
-        },
-        {
-            "Metric": "Active — not on this corporate inactive file",
-            "Count": active,
-            "Pct_of_master": active / pm,
-            "Pct_of_corporate_file": None,
-            "Detail": "Still transacting vs this extract",
-        },
-        {
-            "Metric": "Inactive — on file, staff follow-up list",
-            "Count": followup_count,
-            "Pct_of_master": followup_count / pm,
-            "Pct_of_corporate_file": None,
-            "Detail": "Matched to master, excluding DORMANT",
-        },
-        {
-            "Metric": "Inactive — on file, DORMANT assignment",
-            "Count": dormant_count,
-            "Pct_of_master": dormant_count / pm,
-            "Pct_of_corporate_file": None,
-            "Detail": "Excluded from main matched list",
-        },
-        {
-            "Metric": "Inactive on file — in your master (subtotal)",
-            "Count": inactive_in_master,
-            "Pct_of_master": inactive_in_master / pm,
-            "Pct_of_corporate_file": None,
-            "Detail": "Follow-up + DORMANT",
-        },
-        {
-            "Metric": "Corporate inactive file — total rows",
-            "Count": corporate_rows,
-            "Pct_of_master": None,
-            "Pct_of_corporate_file": None,
-            "Detail": "Rows with a detected merchant code",
-        },
-        {
-            "Metric": "Corporate inactive — not found in master",
-            "Count": unmatched_corporate,
-            "Pct_of_master": None,
-            "Pct_of_corporate_file": unmatched_corporate / pc,
-            "Detail": "Other branch / wrong code / timing",
-        },
+        {"Metric": "Report date", "Count": "", "Pct_of_master": None, "Pct_of_corporate_file": None, "Detail": run_date},
+        {"Metric": "Total merchants (master portfolio)", "Count": total_master, "Pct_of_master": None, "Pct_of_corporate_file": None, "Detail": "All rows with a valid merchant code"},
+        {"Metric": "Active — not on this corporate inactive file", "Count": active, "Pct_of_master": active / pm, "Pct_of_corporate_file": None, "Detail": "Still transacting vs this extract"},
+        {"Metric": "Inactive — on file, staff follow-up list", "Count": followup_count, "Pct_of_master": followup_count / pm, "Pct_of_corporate_file": None, "Detail": "Matched to master, excluding DORMANT"},
+        {"Metric": "Inactive — on file, DORMANT assignment", "Count": dormant_count, "Pct_of_master": dormant_count / pm, "Pct_of_corporate_file": None, "Detail": "Excluded from main matched list"},
+        {"Metric": "Inactive on file — in your master (subtotal)", "Count": inactive_in_master, "Pct_of_master": inactive_in_master / pm, "Pct_of_corporate_file": None, "Detail": "Follow-up + DORMANT"},
+        {"Metric": "Corporate inactive file — total rows", "Count": corporate_rows, "Pct_of_master": None, "Pct_of_corporate_file": None, "Detail": "Rows with a detected merchant code"},
+        {"Metric": "Corporate inactive — not found in master", "Count": unmatched_corporate, "Pct_of_master": None, "Pct_of_corporate_file": unmatched_corporate / pc, "Detail": "Other branch / wrong code / timing"},
     ]
     return pd.DataFrame(rows)
 
@@ -637,30 +723,14 @@ def _dashboard_chart_df(active: int, followup: int, dormant: int) -> pd.DataFram
     )
 
 
-def _write_dashboard_worksheet(
-    workbook,
-    dashboard_df: pd.DataFrame,
-    chart_df: Optional[pd.DataFrame],
-) -> None:
+def _write_dashboard_worksheet(workbook, dashboard_df: pd.DataFrame, chart_df: Optional[pd.DataFrame]) -> None:
     ws = workbook.add_worksheet("Dashboard")
-    hdr = workbook.add_format(
-        {
-            "bold": True,
-            "bg_color": "#2F5597",
-            "font_color": "white",
-            "border": 1,
-            "valign": "vcenter",
-        }
-    )
+    hdr = workbook.add_format({"bold": True, "bg_color": "#C0311E", "font_color": "white", "border": 1, "valign": "vcenter"})
     cell = workbook.add_format({"border": 1, "valign": "vcenter"})
     pct = workbook.add_format({"border": 1, "num_format": "0.0%", "align": "right"})
     num = workbook.add_format({"border": 1, "num_format": "#,##0", "align": "right"})
-    meta = workbook.add_format(
-        {"italic": True, "font_color": "#404040", "border": 1, "text_wrap": True}
-    )
-    sub = workbook.add_format(
-        {"bold": True, "font_color": "#2F5597", "bottom": 1, "valign": "vcenter"}
-    )
+    meta = workbook.add_format({"italic": True, "font_color": "#404040", "border": 1, "text_wrap": True})
+    sub = workbook.add_format({"bold": True, "font_color": "#C0311E", "bottom": 1, "valign": "vcenter"})
 
     for c, name in enumerate(dashboard_df.columns):
         ws.write(0, c, name, hdr)
@@ -700,7 +770,7 @@ def _write_dashboard_worksheet(
 
     if chart_df is not None and not chart_df.empty:
         base = len(dashboard_df) + 2
-        ws.write(base, 0, "Portfolio split (insert Excel chart from this range)", sub)
+        ws.write(base, 0, "Portfolio split", sub)
         for c, name in enumerate(chart_df.columns):
             ws.write(base + 1, c, name, hdr)
         for i, row in enumerate(chart_df.values, start=2):
@@ -722,109 +792,126 @@ def _to_excel_bytes(
         for name, df in sheets.items():
             safe = name[:31]
             df.to_excel(writer, index=False, sheet_name=safe)
-
         if dashboard_df is not None and not dashboard_df.empty:
             _write_dashboard_worksheet(writer.book, dashboard_df, chart_df)
-
     return bio.getvalue()
 
 
-st.set_page_config(page_title="Inactive Merchant Matcher", layout="wide")
-st.title("Inactive Merchant Matcher (Master vs Corporate List)")
-
-st.write(
-    "Upload your **Master Merchant** Excel and the **Corporate Inactive** Excel. "
-    "The app matches by **Merchant Code**. The export mirrors your **Master** columns (minus **Staff Mail** / staff email), "
-    "including **Telephone** and **Account No.** Merchants assigned to staff named **DORMANT** are excluded from the main matched list. "
-    "If a merchant is still inactive on a **later day**, they are flagged **Still_Inactive**. "
-    "Each download includes a **Dashboard** sheet with active/inactive counts and percentages."
+# ── Page config ───────────────────────────────────────────────────────────────
+st.set_page_config(
+    page_title="Dengel Merchant Solver",
+    page_icon="🔥",
+    layout="wide",
+    initial_sidebar_state="collapsed",
 )
 
-tab_match, tab_master = st.tabs(["Match Inactive → Staff", "Master List (Store/Update)"])
+# Inject theme
+st.markdown(THEME_CSS, unsafe_allow_html=True)
 
+# ── Hero header ───────────────────────────────────────────────────────────────
+st.markdown(
+    """
+    <div class="dengel-header">
+        <div class="dengel-logo">🔥</div>
+        <div>
+            <div class="dengel-title">Dengel Merchant Solver</div>
+            <div class="dengel-subtitle">Match inactive merchants to staff — fast, clean, ready to share</div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ── Tabs ──────────────────────────────────────────────────────────────────────
+tab_match, tab_master = st.tabs(["🔍  Match Inactive → Staff", "📋  Master List"])
+
+# ══════════════════════════════════════════════════════════════════════════════
 with tab_master:
-    st.subheader("Master list store")
-    st.caption(
-        "Optional: keep a saved master list inside this app folder so you don't have to upload it every time."
-    )
+    st.markdown('<div class="card"><div class="card-title">Master List Store</div>', unsafe_allow_html=True)
+    st.caption("Keep a saved master list so you don't have to upload it every time.")
 
     stored = _load_master_store()
     if stored is None:
-        st.info("No saved master list yet. Upload one to save it.")
+        st.info("No saved master list yet. Upload one below to save it.")
     else:
-        st.success(f"Loaded saved master list: {MASTER_STORE_PATH}")
+        st.success(f"Saved master list loaded — {len(stored):,} merchants")
         st.dataframe(stored.head(50), use_container_width=True)
 
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown('<div class="card"><div class="card-title">Upload & Save</div>', unsafe_allow_html=True)
     master_upload_for_store = st.file_uploader(
-        "Upload Master Excel to save/replace",
+        "Upload Master Excel to save / replace",
         type=["xlsx", "xls"],
         key="master_store_upload",
     )
 
     col_a, col_b = st.columns(2)
     with col_a:
-        replace_store = st.button("Save (replace store)", type="primary")
+        replace_store = st.button("💾  Save (replace)", type="primary")
     with col_b:
-        append_store = st.button("Append into store (dedupe by Merchant Code)")
+        append_store = st.button("➕  Append & dedupe")
 
     if master_upload_for_store is not None and (replace_store or append_store):
         try:
             incoming = _read_excel(master_upload_for_store)
             incoming_guess = _guess_columns(incoming)
-
             if replace_store or stored is None:
                 combined = incoming
             else:
                 combined = pd.concat([stored, incoming], ignore_index=True)
-
             combined = _dedupe_master(combined, incoming_guess.merchant_code)
             _save_master_store(combined)
-            st.success("Master list saved.")
+            st.success(f"Master list saved — {len(combined):,} unique merchants.")
             st.dataframe(combined.head(50), use_container_width=True)
         except Exception as e:
             st.error(str(e))
+    st.markdown("</div>", unsafe_allow_html=True)
 
+
+# ══════════════════════════════════════════════════════════════════════════════
 with tab_match:
-    st.subheader("Match corporate inactive list to staff assignments")
+    st.markdown('<div class="card"><div class="card-title">Upload Files</div>', unsafe_allow_html=True)
 
-    use_saved_master = st.checkbox(
-        "Use saved master list (if available)",
-        value=True,
-    )
+    use_saved_master = st.checkbox("Use saved master list (if available)", value=True)
 
     left, right = st.columns(2)
     with left:
         master_upload = st.file_uploader(
-            "Upload Master Merchant Excel",
+            "Master Merchant Excel",
             type=["xlsx", "xls"],
             key="master_match_upload",
             disabled=use_saved_master and _load_master_store() is not None,
         )
     with right:
         inactive_upload = st.file_uploader(
-            "Upload Corporate Inactive Excel",
+            "Corporate Inactive Excel",
             type=["xlsx", "xls"],
             key="inactive_upload",
         )
 
     only_matched = st.checkbox("Show only matched (assigned) rows", value=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
+    st.markdown('<div class="card"><div class="card-title">Still-Inactive Tracking</div>', unsafe_allow_html=True)
     st.caption(
-        "**Still inactive:** merchants who were already on your matched inactive export on a **previous calendar day**, "
-        "and appear again today, get **Still_Inactive = Yes**. History is stored in `data/inactive_merchant_tracker.json` "
-        "(codes that drop off the inactive list are removed from tracking)."
+        "Merchants already on a previous day's matched list get flagged **Still_Inactive = Yes**. "
+        "History lives in `data/inactive_merchant_tracker.json`."
     )
-    if st.button("Clear still-inactive history", key="clear_inactive_tracker"):
+    if st.button("🗑️  Clear still-inactive history", key="clear_inactive_tracker"):
         _save_inactive_tracker({})
-        st.success("Carryover history cleared. Next run will not flag any merchant as still inactive.")
+        st.success("History cleared. Next run will not flag any merchant as still inactive.")
+    st.markdown("</div>", unsafe_allow_html=True)
 
-    if st.button("Run matching", type="primary", disabled=inactive_upload is None):
+    run_btn = st.button("▶  Run Matching", type="primary", disabled=inactive_upload is None)
+
+    if run_btn:
         try:
             if use_saved_master and _load_master_store() is not None:
                 master_df = _load_master_store()
             else:
                 if master_upload is None:
-                    raise ValueError("Please upload a Master Merchant Excel (or enable saved master).")
+                    raise ValueError("Please upload a Master Merchant Excel (or enable the saved master toggle).")
                 master_df = _read_excel(master_upload)
 
             inactive_df = _read_excel(inactive_upload)
@@ -844,7 +931,7 @@ with tab_match:
             )
             matched = _add_matched_row_numbers(matched)
 
-            st.subheader("Portfolio overview")
+            # ── Summary metrics ────────────────────────────────────────────
             dr = dashboard_df.reset_index(drop=True)
 
             def _dash_count(row_idx: int) -> int:
@@ -864,60 +951,40 @@ with tab_match:
             not_in_master = _dash_count(7)
             pm = total_master if total_master else 1
 
+            st.markdown('<div class="card"><div class="card-title">Summary</div>', unsafe_allow_html=True)
             k1, k2, k3, k4 = st.columns(4)
-            k1.metric(
-                "Active",
-                f"{active_n:,}",
-                f"{100 * active_n / pm:.1f}% of master",
-            )
-            k2.metric(
-                "Inactive (follow-up)",
-                f"{follow_n:,}",
-                f"{100 * follow_n / pm:.1f}% of master",
-            )
-            k3.metric(
-                "Inactive (DORMANT)",
-                f"{dorm_n:,}",
-                f"{100 * dorm_n / pm:.1f}% of master",
-            )
-            k4.metric(
-                "Corporate file",
-                f"{corp_rows:,} rows",
-                f"{not_in_master:,} not in master",
-            )
+            k1.metric("Active", f"{active_n:,}", f"{100 * active_n / pm:.1f}% of master")
+            k2.metric("Inactive (follow-up)", f"{follow_n:,}", f"{100 * follow_n / pm:.1f}% of master")
+            k3.metric("Inactive (DORMANT)", f"{dorm_n:,}", f"{100 * dorm_n / pm:.1f}% of master")
+            k4.metric("Corporate file", f"{corp_rows:,} rows", f"{not_in_master:,} not in master")
+            st.markdown("</div>", unsafe_allow_html=True)
 
-            st.caption("Split of your master portfolio (active vs inactive on this file)")
-            st.bar_chart(chart_df.set_index("Status"))
-
-            with st.expander("Full metrics table (Excel **Dashboard** sheet)"):
-                st.dataframe(dashboard_df, use_container_width=True, hide_index=True)
-
-            st.write("Detected columns")
-            st.json(
-                {
-                    "master": master_guess.__dict__,
-                    "inactive": inactive_guess.__dict__,
-                }
-            )
-
+            # ── DORMANT notice ─────────────────────────────────────────────
             if len(excluded_dormant) > 0:
                 st.info(
-                    f"Excluded **{len(excluded_dormant)}** merchant(s) assigned to staff **DORMANT** "
-                    "(see sheet *Excluded_Dormant_Staff* in the download)."
+                    f"**{len(excluded_dormant)}** merchant(s) assigned to staff **DORMANT** "
+                    "are excluded from the main list (see *Excluded_Dormant_Staff* sheet in the download)."
                 )
 
-            if only_matched:
-                st.subheader(f"Matched inactive merchants ({len(matched)})")
-                st.dataframe(matched, use_container_width=True)
-            else:
-                st.subheader(f"Matched inactive merchants ({len(matched)})")
-                st.dataframe(matched, use_container_width=True)
-                st.subheader(f"Unmatched inactive merchants ({len(unmatched)})")
-                st.dataframe(unmatched, use_container_width=True)
-                if len(excluded_dormant) > 0:
-                    st.subheader(f"Excluded (DORMANT staff) — not in matched list ({len(excluded_dormant)})")
-                    st.dataframe(excluded_dormant, use_container_width=True)
+            # ── Results tables ─────────────────────────────────────────────
+            st.markdown('<div class="card"><div class="card-title">Matched Inactive Merchants</div>', unsafe_allow_html=True)
+            st.caption(f"{len(matched):,} matched merchants ready for staff follow-up")
+            st.dataframe(matched, use_container_width=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
+            if not only_matched:
+                st.markdown('<div class="card"><div class="card-title">Unmatched Inactive Merchants</div>', unsafe_allow_html=True)
+                st.caption(f"{len(unmatched):,} merchants on the corporate file but not in your master")
+                st.dataframe(unmatched, use_container_width=True)
+                st.markdown("</div>", unsafe_allow_html=True)
+
+                if len(excluded_dormant) > 0:
+                    st.markdown('<div class="card"><div class="card-title">Excluded — DORMANT Staff</div>', unsafe_allow_html=True)
+                    st.caption(f"{len(excluded_dormant):,} merchants excluded from the matched list")
+                    st.dataframe(excluded_dormant, use_container_width=True)
+                    st.markdown("</div>", unsafe_allow_html=True)
+
+            # ── Download ───────────────────────────────────────────────────
             now = datetime.now().strftime("%Y%m%d_%H%M%S")
             sheets: dict[str, pd.DataFrame] = {
                 "Matched_Inactive": matched,
@@ -925,16 +992,19 @@ with tab_match:
             }
             if len(excluded_dormant) > 0:
                 sheets["Excluded_Dormant_Staff"] = excluded_dormant
-            xbytes = _to_excel_bytes(
-                sheets,
-                dashboard_df=dashboard_df,
-                chart_df=chart_df,
-            )
+            xbytes = _to_excel_bytes(sheets, dashboard_df=dashboard_df, chart_df=chart_df)
             st.download_button(
-                "Download Excel results",
+                "⬇  Download Excel Results",
                 data=xbytes,
-                file_name=f"inactive_matched_{now}.xlsx",
+                file_name=f"dengel_matched_{now}.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             )
+
         except Exception as e:
             st.error(str(e))
+
+# ── Footer ────────────────────────────────────────────────────────────────────
+st.markdown(
+    '<div class="dengel-footer">Powered by <b>Dengel Merchant Solver</b> · Built for Awash Bank branch teams</div>',
+    unsafe_allow_html=True,
+)
