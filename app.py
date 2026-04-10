@@ -20,9 +20,8 @@ THEME_CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 /* ── Reset & base ── */
-html, body, [class*="css"], .stApp * {
+html, body, [class*="css"] {
     font-family: 'Inter', sans-serif !important;
-    box-sizing: border-box;
 }
 
 /* ── Animated gradient page background ── */
@@ -181,41 +180,13 @@ html, body, [class*="css"], .stApp * {
 }
 
 /* ══════════════════════════════════════════════
-   FILE UPLOADER  (fixes invisible text)
+   FILE UPLOADER
 ══════════════════════════════════════════════ */
 [data-testid="stFileUploader"] {
-    background: linear-gradient(135deg, #F0F4FB, #FBF4F1) !important;
+    background: linear-gradient(135deg, #EEF3FB 0%, #FBF4F1 100%) !important;
     border-radius: 14px !important;
     border: 2px dashed #1B4D8E !important;
-    padding: 14px !important;
-}
-/* uploader label */
-[data-testid="stFileUploader"] label,
-[data-testid="stFileUploader"] label p,
-[data-testid="stFileUploader"] label span {
-    color: #1B4D8E !important;
-    font-weight: 700 !important;
-    font-size: 0.95rem !important;
-}
-/* "Drag and drop …" instruction text */
-[data-testid="stFileUploadDropzone"] p,
-[data-testid="stFileUploadDropzone"] span,
-[data-testid="stFileUploadDropzone"] small {
-    color: #444 !important;
-    font-size: 0.85rem !important;
-}
-/* "200MB per file" note */
-[data-testid="stFileUploadDropzone"] {
-    color: #555 !important;
-}
-/* Browse button inside uploader */
-[data-testid="stFileUploadDropzone"] button {
-    background: #1B4D8E !important;
-    color: #FFFFFF !important;
-    border: none !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    padding: 6px 18px !important;
+    padding: 10px 14px !important;
 }
 
 /* ══════════════════════════════════════════════
