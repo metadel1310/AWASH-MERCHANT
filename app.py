@@ -14,194 +14,353 @@ import streamlit as st
 MASTER_STORE_PATH = "data/master_store.xlsx"
 INACTIVE_TRACKER_PATH = "data/inactive_merchant_tracker.json"
 
-# ── Awash Birr Pro–inspired theme ────────────────────────────────────────────
+# ── Awash Bank dual-tone theme (orange + blue) ───────────────────────────────
 THEME_CSS = """
 <style>
-/* Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
-html, body, [class*="css"] {
+/* ── Reset & base ── */
+html, body, [class*="css"], .stApp * {
     font-family: 'Inter', sans-serif !important;
+    box-sizing: border-box;
 }
 
-/* ── Page background ── */
+/* ── Animated gradient page background ── */
 .stApp {
-    background: #F4F6F9;
+    background: linear-gradient(145deg, #EEF2F9 0%, #F8F4F1 40%, #EDF1F8 80%, #F5EEF0 100%);
+    min-height: 100vh;
 }
 
-/* ── Hero header ── */
+/* ── Main content block padding ── */
+.block-container {
+    padding-top: 1.5rem !important;
+    padding-bottom: 2rem !important;
+}
+
+/* ══════════════════════════════════════════════
+   HERO HEADER
+   Orange → deep Awash blue tri-tone gradient
+══════════════════════════════════════════════ */
 .dengel-header {
-    background: linear-gradient(135deg, #C0311E 0%, #E85B2C 60%, #F0812A 100%);
-    border-radius: 18px;
-    padding: 28px 32px 22px 32px;
-    margin-bottom: 28px;
-    box-shadow: 0 8px 32px rgba(192,49,30,0.22);
+    background: linear-gradient(120deg, #B82C1A 0%, #E04B25 35%, #1B4D8E 75%, #0D2F5E 100%);
+    border-radius: 20px;
+    padding: 30px 36px 24px 36px;
+    margin-bottom: 26px;
+    box-shadow: 0 10px 40px rgba(27,77,142,0.22), 0 4px 16px rgba(192,49,30,0.18);
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+}
+.dengel-header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    pointer-events: none;
+}
+.dengel-header::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 30%;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    pointer-events: none;
 }
 .dengel-logo {
-    font-size: 2.6rem;
+    font-size: 2.8rem;
     line-height: 1;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
 }
 .dengel-title {
     color: #FFFFFF;
-    font-size: 1.75rem;
-    font-weight: 800;
+    font-size: 1.8rem;
+    font-weight: 900;
     letter-spacing: -0.5px;
     line-height: 1.15;
     margin: 0;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.18);
 }
 .dengel-subtitle {
-    color: rgba(255,255,255,0.82);
-    font-size: 0.92rem;
-    margin-top: 4px;
+    color: rgba(255,255,255,0.85);
+    font-size: 0.93rem;
+    margin-top: 5px;
     font-weight: 400;
+    letter-spacing: 0.2px;
 }
 
-/* ── Tabs ── */
+/* ══════════════════════════════════════════════
+   TABS
+══════════════════════════════════════════════ */
 .stTabs [data-baseweb="tab-list"] {
-    background: #FFFFFF;
-    border-radius: 12px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 14px;
     padding: 6px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    box-shadow: 0 2px 12px rgba(27,77,142,0.10);
     gap: 4px;
+    border: 1px solid rgba(27,77,142,0.08);
 }
 .stTabs [data-baseweb="tab"] {
-    border-radius: 9px !important;
-    font-weight: 600 !important;
-    color: #666 !important;
-    padding: 8px 22px !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    color: #1B4D8E !important;
+    padding: 9px 24px !important;
+    transition: background 0.2s, color 0.2s !important;
 }
 .stTabs [aria-selected="true"] {
-    background: linear-gradient(135deg, #C0311E, #E85B2C) !important;
+    background: linear-gradient(120deg, #B82C1A, #E04B25 50%, #1B4D8E) !important;
     color: #FFFFFF !important;
+    box-shadow: 0 3px 12px rgba(27,77,142,0.22) !important;
 }
 
-/* ── Cards / section boxes ── */
+/* ══════════════════════════════════════════════
+   CARDS (glass-morphism style)
+══════════════════════════════════════════════ */
 .card {
-    background: #FFFFFF;
-    border-radius: 14px;
-    padding: 22px 24px;
+    background: rgba(255,255,255,0.90);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 22px 26px;
     margin-bottom: 18px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-    border-left: 4px solid #E85B2C;
+    box-shadow: 0 4px 20px rgba(27,77,142,0.09), 0 1px 4px rgba(0,0,0,0.04);
+    border-left: 4px solid #1B4D8E;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+.card:hover {
+    box-shadow: 0 8px 32px rgba(27,77,142,0.14), 0 2px 8px rgba(0,0,0,0.06);
+    transform: translateY(-1px);
 }
 .card-title {
     font-size: 1.05rem;
-    font-weight: 700;
-    color: #C0311E;
-    margin-bottom: 10px;
+    font-weight: 800;
+    color: #1B4D8E;
+    margin-bottom: 12px;
+    letter-spacing: -0.2px;
 }
 
-/* ── Primary buttons ── */
+/* ══════════════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════════════ */
+/* Primary - orange-red */
 .stButton > button[kind="primary"] {
-    background: linear-gradient(135deg, #C0311E, #E85B2C) !important;
+    background: linear-gradient(120deg, #B82C1A, #E04B25) !important;
     color: #FFFFFF !important;
     border: none !important;
-    border-radius: 10px !important;
+    border-radius: 11px !important;
     font-weight: 700 !important;
-    padding: 10px 28px !important;
-    box-shadow: 0 4px 16px rgba(192,49,30,0.28) !important;
-    transition: opacity 0.15s !important;
+    padding: 11px 30px !important;
+    box-shadow: 0 4px 18px rgba(184,44,26,0.30) !important;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s !important;
+    letter-spacing: 0.2px !important;
 }
 .stButton > button[kind="primary"]:hover {
-    opacity: 0.88 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(184,44,26,0.38) !important;
+}
+.stButton > button[kind="primary"]:active {
+    transform: translateY(0) !important;
 }
 
-/* ── Secondary buttons ── */
+/* Secondary - outlined blue */
 .stButton > button:not([kind="primary"]) {
-    background: #FFFFFF !important;
-    color: #C0311E !important;
-    border: 2px solid #E85B2C !important;
-    border-radius: 10px !important;
+    background: rgba(255,255,255,0.9) !important;
+    color: #1B4D8E !important;
+    border: 2px solid #1B4D8E !important;
+    border-radius: 11px !important;
     font-weight: 600 !important;
+    transition: background 0.15s, transform 0.15s !important;
+}
+.stButton > button:not([kind="primary"]):hover {
+    background: #EEF3FA !important;
+    transform: translateY(-1px) !important;
 }
 
-/* ── File uploader ── */
+/* ══════════════════════════════════════════════
+   FILE UPLOADER  (fixes invisible text)
+══════════════════════════════════════════════ */
 [data-testid="stFileUploader"] {
-    background: #FFF8F6;
-    border-radius: 12px;
-    border: 2px dashed #E85B2C;
-    padding: 12px;
+    background: linear-gradient(135deg, #F0F4FB, #FBF4F1) !important;
+    border-radius: 14px !important;
+    border: 2px dashed #1B4D8E !important;
+    padding: 14px !important;
 }
-
-/* ── Download button ── */
-.stDownloadButton > button {
-    background: linear-gradient(135deg, #1A5E3A, #27AE60) !important;
+/* uploader label */
+[data-testid="stFileUploader"] label,
+[data-testid="stFileUploader"] label p,
+[data-testid="stFileUploader"] label span {
+    color: #1B4D8E !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+}
+/* "Drag and drop …" instruction text */
+[data-testid="stFileUploadDropzone"] p,
+[data-testid="stFileUploadDropzone"] span,
+[data-testid="stFileUploadDropzone"] small {
+    color: #444 !important;
+    font-size: 0.85rem !important;
+}
+/* "200MB per file" note */
+[data-testid="stFileUploadDropzone"] {
+    color: #555 !important;
+}
+/* Browse button inside uploader */
+[data-testid="stFileUploadDropzone"] button {
+    background: #1B4D8E !important;
     color: #FFFFFF !important;
     border: none !important;
-    border-radius: 10px !important;
-    font-weight: 700 !important;
-    padding: 10px 28px !important;
-    box-shadow: 0 4px 16px rgba(39,174,96,0.25) !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    padding: 6px 18px !important;
 }
 
-/* ── Metric cards ── */
-[data-testid="stMetric"] {
-    background: #FFFFFF;
-    border-radius: 12px;
-    padding: 14px 18px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-    border-top: 3px solid #E85B2C;
+/* ══════════════════════════════════════════════
+   DOWNLOAD BUTTON
+══════════════════════════════════════════════ */
+.stDownloadButton > button {
+    background: linear-gradient(120deg, #14532D, #16A34A) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 11px !important;
+    font-weight: 700 !important;
+    padding: 11px 30px !important;
+    box-shadow: 0 4px 18px rgba(22,163,74,0.28) !important;
+    transition: transform 0.15s, box-shadow 0.15s !important;
+    letter-spacing: 0.2px !important;
 }
+.stDownloadButton > button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(22,163,74,0.36) !important;
+}
+
+/* ══════════════════════════════════════════════
+   METRIC CARDS
+══════════════════════════════════════════════ */
+[data-testid="stMetric"] {
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(240,244,252,0.95));
+    border-radius: 14px;
+    padding: 16px 20px;
+    box-shadow: 0 3px 14px rgba(27,77,142,0.10);
+    border-top: 4px solid #1B4D8E;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+[data-testid="stMetric"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(27,77,142,0.16);
+}
+[data-testid="stMetricLabel"] p,
 [data-testid="stMetricLabel"] {
-    color: #888 !important;
-    font-size: 0.82rem !important;
-    font-weight: 600 !important;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    color: #1B4D8E !important;
+    font-size: 0.80rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.6px !important;
 }
 [data-testid="stMetricValue"] {
-    color: #C0311E !important;
-    font-size: 1.55rem !important;
-    font-weight: 800 !important;
+    color: #B82C1A !important;
+    font-size: 1.6rem !important;
+    font-weight: 900 !important;
+}
+[data-testid="stMetricDelta"] {
+    color: #555 !important;
+    font-size: 0.82rem !important;
 }
 
-/* ── Alerts ── */
-.stSuccess {
-    border-radius: 10px !important;
-    border-left: 4px solid #27AE60 !important;
-}
-.stError {
-    border-radius: 10px !important;
-    border-left: 4px solid #C0392B !important;
-}
-.stInfo {
-    border-radius: 10px !important;
-    border-left: 4px solid #E85B2C !important;
-}
-
-/* ── Dataframe ── */
-[data-testid="stDataFrame"] {
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-}
-
-/* ── Checkbox ── */
-[data-testid="stCheckbox"] label {
+/* ══════════════════════════════════════════════
+   LABELS, CAPTIONS, TEXT  (fix low-contrast text)
+══════════════════════════════════════════════ */
+label, .stCheckbox label, .stRadio label {
+    color: #1A2B4A !important;
     font-weight: 600 !important;
-    color: #333 !important;
+}
+.stCaption, [data-testid="stCaptionContainer"] p,
+p[data-testid="stCaptionContainer"] {
+    color: #4A5568 !important;
+    font-size: 0.86rem !important;
+}
+/* General paragraph text */
+.stMarkdown p, .stText p {
+    color: #2D3748 !important;
 }
 
-/* ── Footer badge ── */
+/* ══════════════════════════════════════════════
+   ALERTS
+══════════════════════════════════════════════ */
+[data-testid="stAlert"] {
+    border-radius: 12px !important;
+}
+.stSuccess > div {
+    border-left: 4px solid #16A34A !important;
+    border-radius: 12px !important;
+}
+.stError > div {
+    border-left: 4px solid #B82C1A !important;
+    border-radius: 12px !important;
+}
+.stInfo > div {
+    border-left: 4px solid #1B4D8E !important;
+    border-radius: 12px !important;
+}
+
+/* ══════════════════════════════════════════════
+   DATAFRAME
+══════════════════════════════════════════════ */
+[data-testid="stDataFrame"] {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: 0 3px 14px rgba(27,77,142,0.09) !important;
+    border: 1px solid rgba(27,77,142,0.10) !important;
+}
+
+/* ══════════════════════════════════════════════
+   EXPANDER
+══════════════════════════════════════════════ */
+[data-testid="stExpander"] {
+    background: rgba(255,255,255,0.85) !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(27,77,142,0.12) !important;
+    box-shadow: 0 2px 8px rgba(27,77,142,0.07) !important;
+}
+
+/* ══════════════════════════════════════════════
+   DIVIDER
+══════════════════════════════════════════════ */
+hr {
+    border-color: rgba(27,77,142,0.12) !important;
+}
+
+/* ══════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════ */
 .dengel-footer {
     text-align: center;
-    color: #aaa;
+    color: #8899AA;
     font-size: 0.78rem;
-    margin-top: 40px;
-    padding-bottom: 20px;
+    margin-top: 44px;
+    padding-bottom: 24px;
+    letter-spacing: 0.2px;
 }
-.dengel-footer b {
-    color: #E85B2C;
-}
+.dengel-footer b { color: #E04B25; }
+.dengel-footer span { color: #1B4D8E; }
 
-/* ── Mobile responsive ── */
-@media (max-width: 600px) {
-    .dengel-header { padding: 18px 16px 14px 16px; }
-    .dengel-title  { font-size: 1.25rem; }
-    .card          { padding: 16px 14px; }
+/* ══════════════════════════════════════════════
+   MOBILE
+══════════════════════════════════════════════ */
+@media (max-width: 640px) {
+    .dengel-header {
+        padding: 20px 18px 16px 18px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .dengel-title  { font-size: 1.3rem; }
+    .dengel-subtitle { font-size: 0.82rem; }
+    .card { padding: 16px 14px; }
+    [data-testid="stMetricValue"] { font-size: 1.3rem !important; }
 }
 </style>
 """
