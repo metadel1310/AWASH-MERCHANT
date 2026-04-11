@@ -19,34 +19,9 @@ THEME_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
-/* ── Reset & base typography ── */
+/* ── Reset & base ── */
 html, body, [class*="css"] {
     font-family: 'Inter', sans-serif !important;
-    color: #1A2B4A !important;
-    line-height: 1.6 !important;
-    -webkit-font-smoothing: antialiased;
-}
-/* Body paragraphs */
-p, .stMarkdown p, .stText p {
-    color: #2D3748 !important;
-    font-size: 0.95rem !important;
-    line-height: 1.65 !important;
-    font-weight: 400 !important;
-}
-/* Captions — softer, readable */
-.stCaption, [data-testid="stCaptionContainer"] p,
-p[data-testid="stCaptionContainer"] {
-    color: #5A6A85 !important;
-    font-size: 0.875rem !important;
-    line-height: 1.55 !important;
-    font-weight: 400 !important;
-}
-/* Labels & checkboxes */
-label, .stCheckbox label, .stRadio label {
-    color: #1A2B4A !important;
-    font-size: 0.93rem !important;
-    font-weight: 600 !important;
-    line-height: 1.4 !important;
 }
 
 /* ── Animated gradient page background ── */
@@ -160,9 +135,10 @@ label, .stCheckbox label, .stRadio label {
    CARDS (glass-morphism style)
 ══════════════════════════════════════════════ */
 .card {
-    background: linear-gradient(160deg, #FFFFFF 0%, #F0F6FF 100%);
+    background: linear-gradient(160deg, rgba(255,255,255,0.97) 0%, rgba(240,246,255,0.93) 100%);
+    backdrop-filter: blur(10px);
     border-radius: 16px;
-    padding: 20px 24px 22px 24px;
+    padding: 18px 22px 20px 22px;
     margin-bottom: 16px;
     box-shadow: 0 4px 20px rgba(27,77,142,0.09), 0 1px 4px rgba(0,0,0,0.04);
     border-left: 4px solid #1B4D8E;
@@ -177,15 +153,15 @@ label, .stCheckbox label, .stRadio label {
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    font-size: 0.78rem;
-    font-weight: 700;
+    font-size: 0.72rem;
+    font-weight: 800;
     color: #1B4D8E;
     background: linear-gradient(90deg, #E8F0FD, #F5F0FF);
-    border: 1.5px solid rgba(27,77,142,0.18);
+    border: 1.5px solid rgba(27,77,142,0.15);
     border-radius: 20px;
-    padding: 4px 13px 4px 9px;
-    margin-bottom: 14px;
-    letter-spacing: 0.7px;
+    padding: 3px 11px 3px 8px;
+    margin-bottom: 12px;
+    letter-spacing: 0.6px;
     text-transform: uppercase;
 }
 .card-title::before {
@@ -298,13 +274,20 @@ label, .stCheckbox label, .stRadio label {
 }
 
 /* ══════════════════════════════════════════════
-   HEADINGS inside markdown
+   LABELS, CAPTIONS, TEXT  (fix low-contrast text)
 ══════════════════════════════════════════════ */
-.stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
-    color: #1B4D8E !important;
-    font-weight: 800 !important;
-    letter-spacing: -0.3px !important;
-    line-height: 1.25 !important;
+label, .stCheckbox label, .stRadio label {
+    color: #1A2B4A !important;
+    font-weight: 600 !important;
+}
+.stCaption, [data-testid="stCaptionContainer"] p,
+p[data-testid="stCaptionContainer"] {
+    color: #4A5568 !important;
+    font-size: 0.86rem !important;
+}
+/* General paragraph text */
+.stMarkdown p, .stText p {
+    color: #2D3748 !important;
 }
 
 /* ══════════════════════════════════════════════
@@ -859,13 +842,13 @@ def _build_output(
     matched_active, excluded_dormant = _split_dormant_staff(matched_raw, master_guess)
 
     matched = _furnish_master_like(
-        matched_active, master, master_guess, inactive_guess, "matched"
+        matched_active, master_df, master_guess, inactive_guess, "matched"
     )
     unmatched = _furnish_master_like(
-        unmatched_raw, master, master_guess, inactive_guess, "unmatched"
+        unmatched_raw, master_df, master_guess, inactive_guess, "unmatched"
     )
     excluded_dormant_furnished = _furnish_master_like(
-        excluded_dormant, master, master_guess, inactive_guess, "matched"
+        excluded_dormant, master_df, master_guess, inactive_guess, "matched"
     )
 
     total_master = len(master)
@@ -911,6 +894,7 @@ def _build_dashboard_summary(
         {"Metric": "Inactive — on file, staff follow-up list", "Count": followup_count, "Pct_of_master": followup_count / pm, "Pct_of_corporate_file": None, "Detail": "Matched to master, excluding DORMANT"},
         {"Metric": "Inactive — on file, DORMANT assignment", "Count": dormant_count, "Pct_of_master": dormant_count / pm, "Pct_of_corporate_file": None, "Detail": "Excluded from main matched list"},
         {"Metric": "Inactive on file — in your master (subtotal)", "Count": inactive_in_master, "Pct_of_master": inactive_in_master / pm, "Pct_of_corporate_file": None, "Detail": "Follow-up + DORMANT"},
+        {"Metric": "Corporate inactive file — total rows", "Count": corporate_rows, "Pct_of_master": None, "Pct_of_corporate_file": None, "Detail": "Rows with a detected merchant code"},
         {"Metric": "Corporate inactive — not found in master", "Count": unmatched_corporate, "Pct_of_master": None, "Pct_of_corporate_file": unmatched_corporate / pc, "Detail": "Other branch / wrong code / timing"},
     ]
     return pd.DataFrame(rows)
@@ -1149,7 +1133,8 @@ with tab_match:
             active_n = _dash_count(2)
             follow_n = _dash_count(3)
             dorm_n = _dash_count(4)
-            not_in_master = _dash_count(6)
+            corp_rows = _dash_count(6)
+            not_in_master = _dash_count(7)
             pm = total_master if total_master else 1
 
             st.markdown('<div class="card"><div class="card-title">Summary</div>', unsafe_allow_html=True)
@@ -1157,7 +1142,7 @@ with tab_match:
             k1.metric("Active", f"{active_n:,}", f"{100 * active_n / pm:.1f}% of master")
             k2.metric("Inactive (follow-up)", f"{follow_n:,}", f"{100 * follow_n / pm:.1f}% of master")
             k3.metric("Inactive (DORMANT)", f"{dorm_n:,}", f"{100 * dorm_n / pm:.1f}% of master")
-            k4.metric("Not in master", f"{not_in_master:,}", "other branch / unmatched")
+            k4.metric("Corporate file", f"{corp_rows:,} rows", f"{not_in_master:,} not in master")
             st.markdown("</div>", unsafe_allow_html=True)
 
             # ── DORMANT notice ─────────────────────────────────────────────
