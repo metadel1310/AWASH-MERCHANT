@@ -1149,8 +1149,7 @@ with tab_match:
             active_n = _dash_count(2)
             follow_n = _dash_count(3)
             dorm_n = _dash_count(4)
-            corp_rows = _dash_count(6)
-            not_in_master = _dash_count(7)
+            not_in_master = _dash_count(6)
             pm = total_master if total_master else 1
 
             st.markdown('<div class="card"><div class="card-title">Summary</div>', unsafe_allow_html=True)
@@ -1158,7 +1157,7 @@ with tab_match:
             k1.metric("Active", f"{active_n:,}", f"{100 * active_n / pm:.1f}% of master")
             k2.metric("Inactive (follow-up)", f"{follow_n:,}", f"{100 * follow_n / pm:.1f}% of master")
             k3.metric("Inactive (DORMANT)", f"{dorm_n:,}", f"{100 * dorm_n / pm:.1f}% of master")
-            k4.metric("Corporate file", f"{corp_rows:,} rows", f"{not_in_master:,} not in master")
+            k4.metric("Not in master", f"{not_in_master:,}", "other branch / unmatched")
             st.markdown("</div>", unsafe_allow_html=True)
 
             # ── DORMANT notice ─────────────────────────────────────────────
