@@ -19,9 +19,34 @@ THEME_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
-/* ── Reset & base ── */
+/* ── Reset & base typography ── */
 html, body, [class*="css"] {
     font-family: 'Inter', sans-serif !important;
+    color: #1A2B4A !important;
+    line-height: 1.6 !important;
+    -webkit-font-smoothing: antialiased;
+}
+/* Body paragraphs */
+p, .stMarkdown p, .stText p {
+    color: #2D3748 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.65 !important;
+    font-weight: 400 !important;
+}
+/* Captions — softer, readable */
+.stCaption, [data-testid="stCaptionContainer"] p,
+p[data-testid="stCaptionContainer"] {
+    color: #5A6A85 !important;
+    font-size: 0.875rem !important;
+    line-height: 1.55 !important;
+    font-weight: 400 !important;
+}
+/* Labels & checkboxes */
+label, .stCheckbox label, .stRadio label {
+    color: #1A2B4A !important;
+    font-size: 0.93rem !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
 }
 
 /* ── Animated gradient page background ── */
@@ -135,10 +160,9 @@ html, body, [class*="css"] {
    CARDS (glass-morphism style)
 ══════════════════════════════════════════════ */
 .card {
-    background: linear-gradient(160deg, rgba(255,255,255,0.97) 0%, rgba(240,246,255,0.93) 100%);
-    backdrop-filter: blur(10px);
+    background: linear-gradient(160deg, #FFFFFF 0%, #F0F6FF 100%);
     border-radius: 16px;
-    padding: 18px 22px 20px 22px;
+    padding: 20px 24px 22px 24px;
     margin-bottom: 16px;
     box-shadow: 0 4px 20px rgba(27,77,142,0.09), 0 1px 4px rgba(0,0,0,0.04);
     border-left: 4px solid #1B4D8E;
@@ -153,15 +177,15 @@ html, body, [class*="css"] {
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    font-size: 0.72rem;
-    font-weight: 800;
+    font-size: 0.78rem;
+    font-weight: 700;
     color: #1B4D8E;
     background: linear-gradient(90deg, #E8F0FD, #F5F0FF);
-    border: 1.5px solid rgba(27,77,142,0.15);
+    border: 1.5px solid rgba(27,77,142,0.18);
     border-radius: 20px;
-    padding: 3px 11px 3px 8px;
-    margin-bottom: 12px;
-    letter-spacing: 0.6px;
+    padding: 4px 13px 4px 9px;
+    margin-bottom: 14px;
+    letter-spacing: 0.7px;
     text-transform: uppercase;
 }
 .card-title::before {
@@ -274,20 +298,13 @@ html, body, [class*="css"] {
 }
 
 /* ══════════════════════════════════════════════
-   LABELS, CAPTIONS, TEXT  (fix low-contrast text)
+   HEADINGS inside markdown
 ══════════════════════════════════════════════ */
-label, .stCheckbox label, .stRadio label {
-    color: #1A2B4A !important;
-    font-weight: 600 !important;
-}
-.stCaption, [data-testid="stCaptionContainer"] p,
-p[data-testid="stCaptionContainer"] {
-    color: #4A5568 !important;
-    font-size: 0.86rem !important;
-}
-/* General paragraph text */
-.stMarkdown p, .stText p {
-    color: #2D3748 !important;
+.stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+    color: #1B4D8E !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.3px !important;
+    line-height: 1.25 !important;
 }
 
 /* ══════════════════════════════════════════════
@@ -1082,7 +1099,7 @@ with tab_match:
     st.markdown('<div class="card"><div class="card-title">Still-Inactive Tracking</div>', unsafe_allow_html=True)
     st.caption(
         "Merchants already on a previous day's matched list get flagged **Still_Inactive = Yes**. "
-        "History lives in `data/inactive_merchant_tracker.json`."
+        "Previous matches are automatically remembered across runs."
     )
     if st.button("🗑️  Clear still-inactive history", key="clear_inactive_tracker"):
         _save_inactive_tracker({})
