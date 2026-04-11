@@ -801,7 +801,7 @@ def _build_output(
     master_guess: ColumnGuess,
     inactive_guess: ColumnGuess,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    master = master_df.copy()
+    master = _drop_serial_first_col(master_df.copy())
     inactive = _drop_serial_first_col(inactive_df.copy())
 
     master["_merchant_code_norm"] = master[master_guess.merchant_code].map(
