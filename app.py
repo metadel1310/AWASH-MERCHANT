@@ -859,13 +859,13 @@ def _build_output(
     matched_active, excluded_dormant = _split_dormant_staff(matched_raw, master_guess)
 
     matched = _furnish_master_like(
-        matched_active, master_df, master_guess, inactive_guess, "matched"
+        matched_active, master, master_guess, inactive_guess, "matched"
     )
     unmatched = _furnish_master_like(
-        unmatched_raw, master_df, master_guess, inactive_guess, "unmatched"
+        unmatched_raw, master, master_guess, inactive_guess, "unmatched"
     )
     excluded_dormant_furnished = _furnish_master_like(
-        excluded_dormant, master_df, master_guess, inactive_guess, "matched"
+        excluded_dormant, master, master_guess, inactive_guess, "matched"
     )
 
     total_master = len(master)
@@ -911,7 +911,6 @@ def _build_dashboard_summary(
         {"Metric": "Inactive — on file, staff follow-up list", "Count": followup_count, "Pct_of_master": followup_count / pm, "Pct_of_corporate_file": None, "Detail": "Matched to master, excluding DORMANT"},
         {"Metric": "Inactive — on file, DORMANT assignment", "Count": dormant_count, "Pct_of_master": dormant_count / pm, "Pct_of_corporate_file": None, "Detail": "Excluded from main matched list"},
         {"Metric": "Inactive on file — in your master (subtotal)", "Count": inactive_in_master, "Pct_of_master": inactive_in_master / pm, "Pct_of_corporate_file": None, "Detail": "Follow-up + DORMANT"},
-        {"Metric": "Corporate inactive file — total rows", "Count": corporate_rows, "Pct_of_master": None, "Pct_of_corporate_file": None, "Detail": "Rows with a detected merchant code"},
         {"Metric": "Corporate inactive — not found in master", "Count": unmatched_corporate, "Pct_of_master": None, "Pct_of_corporate_file": unmatched_corporate / pc, "Detail": "Other branch / wrong code / timing"},
     ]
     return pd.DataFrame(rows)
@@ -1099,7 +1098,7 @@ with tab_match:
     st.markdown('<div class="card"><div class="card-title">Still-Inactive Tracking</div>', unsafe_allow_html=True)
     st.caption(
         "Merchants already on a previous day's matched list get flagged **Still_Inactive = Yes**. "
-        "Previous matches are automatically remembered across runs."
+        "History lives in `data/inactive_merchant_tracker.json`."
     )
     if st.button("🗑️  Clear still-inactive history", key="clear_inactive_tracker"):
         _save_inactive_tracker({})
