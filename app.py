@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import calendar
 import io
 import json
 import re
@@ -13,6 +14,17 @@ import streamlit as st
 
 MASTER_STORE_PATH = "data/master_store.xlsx"
 INACTIVE_TRACKER_PATH = "data/inactive_merchant_tracker.json"
+
+
+def _end_of_month_status() -> tuple[bool, int, str]:
+    """Return (is_end_of_month, days_remaining, next_month_label).
+    Triggers when 5 or fewer days remain in the current month."""
+    today = datetime.now()
+    last_day = calendar.monthrange(today.year, today.month)[1]
+    days_left = last_day - today.day
+    next_month_dt = (today.replace(day=28) + __import__("datetime").timedelta(days=4))
+    next_month_label = next_month_dt.strftime("%B %Y")
+    return days_left <= 5, days_left, next_month_label
 
 # ── Awash Bank dual-tone theme (orange + blue) ───────────────────────────────
 THEME_CSS = """
@@ -276,9 +288,14 @@ html, body, [class*="css"] {
 /* ══════════════════════════════════════════════
    LABELS, CAPTIONS, TEXT  (fix low-contrast text)
 ══════════════════════════════════════════════ */
-label, .stCheckbox label, .stRadio label {
+label, .stCheckbox label, .stRadio label,
+.stCheckbox p, .stCheckbox span,
+[data-testid="stCheckbox"] label,
+[data-testid="stCheckbox"] p,
+[data-testid="stCheckbox"] span {
     color: #1A2B4A !important;
     font-weight: 600 !important;
+    font-size: 0.95rem !important;
 }
 .stCaption, [data-testid="stCaptionContainer"] p,
 p[data-testid="stCaptionContainer"] {
@@ -334,6 +351,52 @@ p[data-testid="stCaptionContainer"] {
 ══════════════════════════════════════════════ */
 hr {
     border-color: rgba(27,77,142,0.12) !important;
+}
+
+/* ══════════════════════════════════════════════
+   END-OF-MONTH NOTIFICATION BANNER
+══════════════════════════════════════════════ */
+.eom-banner {
+    background: linear-gradient(120deg, #7B1E0E 0%, #B82C1A 40%, #E04B25 100%);
+    border-radius: 16px;
+    padding: 18px 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 24px rgba(184,44,26,0.30);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.eom-banner-title {
+    color: #FFE8B0;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+.eom-banner-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(255,255,255,0.10);
+    border-radius: 10px;
+    padding: 11px 15px;
+}
+.eom-banner-icon {
+    font-size: 1.3rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+.eom-banner-text {
+    color: #FFFFFF;
+    font-size: 0.93rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+.eom-banner-text strong {
+    color: #FFE8B0;
+    font-weight: 800;
 }
 
 /* ══════════════════════════════════════════════
@@ -1008,6 +1071,40 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# ── End-of-month notification banner ─────────────────────────────────────────
+_eom, _days_left, _next_month = _end_of_month_status()
+if _eom:
+    _last_follow = st.session_state.get("last_follow_n")
+    _last_total = st.session_state.get("last_total_master")
+    if _last_follow is not None and _last_total is not None:
+        _activate_msg = (
+            f"Your last run shows <strong>{_last_follow:,} inactive merchant(s)</strong> "
+            f"out of <strong>{_last_total:,}</strong> need activating to reach 100%. "
+            f"<strong>{_days_left} day(s) left</strong> — follow up now."
+        )
+    else:
+        _activate_msg = (
+            f"<strong>{_days_left} day(s)</strong> left this month. "
+            "Run the match tool above to see exactly how many merchants need activating to reach 100%."
+        )
+    st.markdown(f"""
+    <div class="eom-banner">
+        <div class="eom-banner-title">🔔 End-of-Month Reminders — {_next_month} approaching</div>
+        <div class="eom-banner-row">
+            <div class="eom-banner-icon">🎯</div>
+            <div class="eom-banner-text">{_activate_msg}</div>
+        </div>
+        <div class="eom-banner-row">
+            <div class="eom-banner-icon">📋</div>
+            <div class="eom-banner-text">
+                <strong>Update your Master Merchant list</strong> before the new month starts —
+                go to the <em>Master List</em> tab and upload the latest file so newly recruited
+                merchants are included in <strong>{_next_month}</strong> reports.
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
 # ── Tabs ──────────────────────────────────────────────────────────────────────
 tab_match, tab_master = st.tabs(["🔍  Match Inactive → Staff", "📋  Master List"])
 
@@ -1133,16 +1230,15 @@ with tab_match:
             active_n = _dash_count(2)
             follow_n = _dash_count(3)
             dorm_n = _dash_count(4)
-            corp_rows = _dash_count(6)
-            not_in_master = _dash_count(7)
             pm = total_master if total_master else 1
+            st.session_state["last_follow_n"] = follow_n
+            st.session_state["last_total_master"] = total_master
 
             st.markdown('<div class="card"><div class="card-title">Summary</div>', unsafe_allow_html=True)
-            k1, k2, k3, k4 = st.columns(4)
+            k1, k2, k3 = st.columns(3)
             k1.metric("Active", f"{active_n:,}", f"{100 * active_n / pm:.1f}% of master")
             k2.metric("Inactive (follow-up)", f"{follow_n:,}", f"{100 * follow_n / pm:.1f}% of master")
             k3.metric("Inactive (DORMANT)", f"{dorm_n:,}", f"{100 * dorm_n / pm:.1f}% of master")
-            k4.metric("Corporate file", f"{corp_rows:,} rows", f"{not_in_master:,} not in master")
             st.markdown("</div>", unsafe_allow_html=True)
 
             # ── DORMANT notice ─────────────────────────────────────────────
@@ -1155,19 +1251,19 @@ with tab_match:
             # ── Results tables ─────────────────────────────────────────────
             st.markdown('<div class="card"><div class="card-title">Matched Inactive Merchants</div>', unsafe_allow_html=True)
             st.caption(f"{len(matched):,} matched merchants ready for staff follow-up")
-            st.dataframe(matched, use_container_width=True)
+            st.dataframe(matched, use_container_width=True, hide_index=True)
             st.markdown("</div>", unsafe_allow_html=True)
 
             if not only_matched:
                 st.markdown('<div class="card"><div class="card-title">Unmatched Inactive Merchants</div>', unsafe_allow_html=True)
                 st.caption(f"{len(unmatched):,} merchants on the corporate file but not in your master")
-                st.dataframe(unmatched, use_container_width=True)
+                st.dataframe(unmatched, use_container_width=True, hide_index=True)
                 st.markdown("</div>", unsafe_allow_html=True)
 
                 if len(excluded_dormant) > 0:
                     st.markdown('<div class="card"><div class="card-title">Excluded — DORMANT Staff</div>', unsafe_allow_html=True)
                     st.caption(f"{len(excluded_dormant):,} merchants excluded from the matched list")
-                    st.dataframe(excluded_dormant, use_container_width=True)
+                    st.dataframe(excluded_dormant, use_container_width=True, hide_index=True)
                     st.markdown("</div>", unsafe_allow_html=True)
 
             # ── Download ───────────────────────────────────────────────────
