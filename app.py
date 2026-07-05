@@ -1063,8 +1063,8 @@ st.markdown(
     <div class="dengel-header">
         <div class="dengel-logo">🔥</div>
         <div>
-            <div class="dengel-title">Dengel Merchant Solver</div>
-            <div class="dengel-subtitle">Match inactive merchants to staff — fast, clean, ready to share</div>
+            <div class="dengel-title">awash bank merchant</div>
+            <div class="nejash-subtitle">Match inactive merchants to list — fast, clean, ready to share</div>
         </div>
     </div>
     """,
@@ -1287,6 +1287,6 @@ with tab_match:
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown(
-    '<div class="dengel-footer">Powered by <b>Dengel Merchant Solver</b> · Dev <span>emneteabg</span> · Built for Awash Bank branch teams</div>',
+    '<div class="dengel-footer">Powered by <b>awash digital banking</b> · Dev <span>awash</span> · Built for Awash Bank branch teams</div>',
     unsafe_allow_html=True,
 )
