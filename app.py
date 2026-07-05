@@ -1048,7 +1048,7 @@ def _to_excel_bytes(
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Dengel Merchant Solver",
+    page_title="nejashi merchant",
     page_icon="🔥",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -1063,7 +1063,7 @@ st.markdown(
     <div class="dengel-header">
         <div class="dengel-logo">🔥</div>
         <div>
-            <div class="dengel-title">Dengel Merchant Solver</div>
+            <div class="dengel-title">nejashi merchant</div>
             <div class="dengel-subtitle">Match inactive merchants to staff — fast, clean, ready to share</div>
         </div>
     </div>
@@ -1287,6 +1287,6 @@ with tab_match:
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown(
-    '<div class="dengel-footer">Powered by <b>Dengel Merchant Solver</b> · Dev <span>emneteabg</span> · Built for Awash Bank branch teams</div>',
+    '<div class="dengel-footer">Powered by <b>awash digital banking</b> · Dev <span>digital banking</span> · Built for Awash Bank branch teams</div>',
     unsafe_allow_html=True,
 )
