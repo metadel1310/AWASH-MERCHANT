@@ -1278,7 +1278,7 @@ with tab_match:
             st.download_button(
                 "⬇  Download Excel Results",
                 data=xbytes,
-                file_name=f"dengel_matched_{now}.xlsx",
+                file_name=f"nejashi_matched_{now}.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             )
 
